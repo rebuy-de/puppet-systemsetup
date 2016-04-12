@@ -16,7 +16,7 @@
 #
 # [*value*]
 #   The value will only be set if the output of the get command does not 
-#   contain the when_match pattern.
+#   contain the when_match pattern.
 #
 # [*pre_pipe*]
 #   Some set operations require basic yes/no input, you can provide a command
@@ -34,13 +34,13 @@ define systemsetup::run(
     fail('systemsetup is only supported on Mac OS X')
   }
 
-  if $pre_pipe {
+  if !empty($pre_pipe) {
     $_pre_pipe = "${pre_pipe} | "
   }else{
     $_pre_pipe = $pre_pipe
   }
 
-  if $invert_when_match {
+  if ($invert_when_match) {
     $_invert_when_match = '-v '
   }else{
     $_invert_when_match = ''
@@ -49,7 +49,7 @@ define systemsetup::run(
   $exec_cmd = "${_pre_pipe}/usr/sbin/systemsetup -set${key} ${value}"
 
   exec { $exec_cmd:
-    onlyif =>
-      "/usr/sbin/systemsetup -get${key} | grep ${_invert_when_match}'${when_match}'"
+    path => "/usr/sbin:/usr/bin",
+    onlyif => "/usr/sbin/systemsetup -get${key} | grep ${_invert_when_match}'${when_match}'"
   }
 }
