@@ -55,7 +55,7 @@ class systemsetup(
   $network_time_server  = undef,
   $computer_sleep_mins  = undef,
   $display_sleep_mins   = undef,
-  $hardddisk_sleep_mins = undef
+  $harddisk_sleep_mins = undef
 ){
   # Remote login
   if $remote_login {
